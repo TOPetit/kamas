@@ -24,21 +24,23 @@
 
     $: {
         if (chatDump) {
+            resources = [];
+            totalKamas = 0;
             let lines = chatDump.split("\n");
-            lines.append("");
+            lines.push("");
             let matches = lines
                 .map((line) => line.match(regex))
                 .filter(Boolean);
             matches.forEach((element) => {
-                console.log(element);
-                let [_, count, name, price] = element;
-                let resource: resource = {
-                    name: name,
-                    count: parseInt(count),
-                    totalPrice: parseInt(price.replace(/\D/g, "")),
-                };
-                processLine(resource);
-                console.log(resources);
+                if (element) {
+                    let [_, count, name, price] = element;
+                    let resource: resource = {
+                        name: name,
+                        count: parseInt(count),
+                        totalPrice: parseInt(price.replace(/\D/g, "")),
+                    };
+                    processLine(resource);
+                }
             });
             totalKamas = resources.reduce(
                 (acc, curr) => acc + curr.totalPrice,
@@ -50,25 +52,31 @@
         }
     }
 
-    function adjustHeight(event) {
-        const textarea = event.target;
-        textarea.style.height = "auto";
-        textarea.style.height = textarea.scrollHeight + "px";
+    function adjustHeight(event: Event) {
+        const textarea = event.target as HTMLTextAreaElement | null;
+        if (textarea) {
+            textarea.style.height = "auto";
+            textarea.style.height = textarea.scrollHeight + "px";
+        }
     }
 
     function prettyPrintNumber(num: number): string {
         return num.toLocaleString("fr-FR");
     }
-    <script>function adjustHeight(event) {
-        const textarea = event.target;
-        textarea.style.height = "auto";
-        textarea.style.height = textarea.scrollHeight + "px";
-    };
 
-    function handlePaste(event) {
-        setTimeout(() => {
-            adjustHeight(event);
-        }, 0);
+    function handlePaste(event: ClipboardEvent) {
+        const clipboardData = event.clipboardData;
+        if (clipboardData) {
+            const pastedData = clipboardData.getData("Text");
+            chatDump += pastedData;
+            window.scrollTo(0, 0); // Scroll to the top of the page
+
+            // Scroll the textarea to the top
+            const textarea = event.target as HTMLTextAreaElement;
+            if (textarea) {
+                textarea.scrollTop = 0;
+            }
+        }
     }
 </script>
 
