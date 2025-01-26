@@ -112,6 +112,7 @@
     }
     .large-input {
         width: 50%;
+        min-height: 100px;
         font-size: 1em;
         overflow: hidden;
         resize: none;
