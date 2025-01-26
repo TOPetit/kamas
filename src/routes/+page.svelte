@@ -1,4 +1,12 @@
 <script lang="ts">
+    import {
+        TableContainer,
+        TableBody,
+        TableHead,
+        TableRow,
+        TableCell,
+    } from "svelte-accessible-table";
+
     let regex: RegExp = /(\d+)\s+x\s+\[(.+?)\]\s+\(([\d\s]+)\s+kamas\)/;
     let chatDump: string = "";
 
@@ -78,22 +86,46 @@
             }
         }
     }
+
+    function ceil(num: number): number {
+        return Math.ceil(num);
+    }
 </script>
 
 <div class="container">
     <div class="left-content">
-        <ul>
-            {#each resources as resource}
-                <li>
-                    {resource.count} x {resource.name}: {prettyPrintNumber(
-                        resource.totalPrice,
-                    )} kamas
-                </li>
-            {/each}
-        </ul>
-        {#if totalKamas > 0}
-            <p>Total: {prettyPrintNumber(totalKamas)} kamas</p>
-        {/if}
+        <TableContainer caption="Ressources">
+            <TableHead>
+                <TableRow>
+                    <TableCell>Nom</TableCell>
+                    <TableCell>Quantité</TableCell>
+                    <TableCell>Prix</TableCell>
+                    <TableCell>Prix à l'unité</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {#each resources as resource}
+                    <TableRow>
+                        <TableCell>{resource.name}</TableCell>
+                        <TableCell>{resource.count}</TableCell>
+                        <TableCell
+                            >{prettyPrintNumber(
+                                ceil(resource.totalPrice / resource.count),
+                            )}</TableCell
+                        >
+                        <TableCell
+                            >{prettyPrintNumber(resource.totalPrice)}</TableCell
+                        >
+                    </TableRow>
+                {/each}
+                <TableRow>
+                    <TableCell>Total</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>{prettyPrintNumber(totalKamas)}</TableCell>
+                </TableRow>
+            </TableBody>
+        </TableContainer>
     </div>
     <textarea
         class="large-input"
