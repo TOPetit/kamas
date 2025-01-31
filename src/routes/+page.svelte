@@ -72,21 +72,6 @@
         return num.toLocaleString("fr-FR");
     }
 
-    function handlePaste(event: ClipboardEvent) {
-        const clipboardData = event.clipboardData;
-        if (clipboardData) {
-            const pastedData = clipboardData.getData("Text");
-            chatDump += pastedData;
-            window.scrollTo(0, 0); // Scroll to the top of the page
-
-            // Scroll the textarea to the top
-            const textarea = event.target as HTMLTextAreaElement;
-            if (textarea) {
-                textarea.scrollTop = 0;
-            }
-        }
-    }
-
     function ceil(num: number): number {
         return Math.ceil(num);
     }
@@ -131,7 +116,6 @@
         class="large-input"
         bind:value={chatDump}
         on:input={adjustHeight}
-        on:paste={handlePaste}
         spellcheck="false"
         autocomplete="off"
     ></textarea>
