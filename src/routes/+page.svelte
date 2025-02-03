@@ -84,8 +84,8 @@
                 <TableRow>
                     <TableCell>Nom</TableCell>
                     <TableCell>Quantité</TableCell>
-                    <TableCell>Prix</TableCell>
                     <TableCell>Prix à l'unité</TableCell>
+                    <TableCell>Prix</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
